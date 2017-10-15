@@ -3,17 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Test;
+use app\models\Seckill;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\business\Test as Tests;
 
 /**
- * TestController implements the CRUD actions for Test model.
+ * SeckillController implements the CRUD actions for Seckill model.
  */
-class TestController extends Controller
+class SeckillController extends Controller
 {
     /**
      * @inheritdoc
@@ -31,13 +30,13 @@ class TestController extends Controller
     }
 
     /**
-     * Lists all Test models.
+     * Lists all Seckill models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Test::find(),
+            'query' => Seckill::find(),
         ]);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class TestController extends Controller
     }
 
     /**
-     * Displays a single Test model.
+     * Displays a single Seckill model.
      * @param integer $id
      * @return mixed
      */
@@ -58,16 +57,16 @@ class TestController extends Controller
     }
 
     /**
-     * Creates a new Test model.
+     * Creates a new Seckill model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Test();
+        $model = new Seckill();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->seckill_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -76,7 +75,7 @@ class TestController extends Controller
     }
 
     /**
-     * Updates an existing Test model.
+     * Updates an existing Seckill model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -86,7 +85,7 @@ class TestController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->seckill_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -95,7 +94,7 @@ class TestController extends Controller
     }
 
     /**
-     * Deletes an existing Test model.
+     * Deletes an existing Seckill model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -108,42 +107,35 @@ class TestController extends Controller
     }
 
     /**
-     * Finds the Test model based on its primary key value.
+     * Finds the Seckill model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Test the loaded model
+     * @return Seckill the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Test::findOne($id)) !== null) {
+        if (($model = Seckill::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
+
     public function actionTest()
     {
-        $model = new Tests();
-        // $model->scenario='create';
-        print_r($model->attributes);
-        $data = [
-            'name' => 'test',
-            'body' => 'testtee'
-        ];
-        $model->attributes = $data;
-        // $model->load($data);
-        print_r($model->attributes);
-        $model->save();
-        die('test');
+        $model = new Seckill();
+//        $res=$model->order_check_mysql(1000);
+//        print_r($res);
+//        $model->order_check_transaction(1000);
+        $model->order_check_redis(1000);
     }
 
-    public function actionSeckill()
+    public function actionList()
     {
-        Yii::$app->redis->set('mykey', 'some value');
-        print_r(Yii::$app->redis->get('mykey'));
+        for ($i = 0; $i < 500; $i++) {
+            Yii::$app->redis->rpush('goods:1000', 1);
+        }
     }
-
-
 }

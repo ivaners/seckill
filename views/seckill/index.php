@@ -6,24 +6,27 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tests';
+$this->title = 'Seckills';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="test-index">
+<div class="seckill-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Test', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Seckill', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            'seckill_id',
             'name',
-            'body',
+            'number',
+            'start_time',
+            'end_time',
+            // 'create_time',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
